@@ -26,7 +26,7 @@ def calculate_rate(x, temp, state, max_spin):
 
 # Initialize 2D array of spins
 K = 10000
-gamma = np.tanh(K)
+gamma = 1
 num_spins = 256
 num_updates = 100*num_spins*num_spins
 state = 2*np.random.randint(2, size=(num_spins))-1
