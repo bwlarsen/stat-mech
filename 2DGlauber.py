@@ -2,7 +2,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 
+# Function to calculate transition rates
 def calculate_rate(x, y, temp, state, max_spin):
+
+	#This is to account for periodic boundary conditions
 	if (x == 0):
 		s1 = state[max_spin-1, y]
 	else:
@@ -43,6 +46,7 @@ i = 0
 
 t0 = time.time()
 
+# Perform the updates
 while(i < num_updates):
 	row = int(np.random.choice(idx))
 	col = int(np.random.choice(idx))
@@ -57,6 +61,7 @@ t1 = time.time()
 total = t1 - t0
 print total
 
+# Show the final configuration
 plt.imshow(state, cmap='Greys',  interpolation='nearest')
 plt.show()
 
