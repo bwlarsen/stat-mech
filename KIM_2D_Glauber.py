@@ -52,29 +52,6 @@ idx = np.linspace(0, num_spins - 1, num_spins)
 i = 0
 
 t0 = time.time()
-
-
-#while(j < num_trials)
-
-# Perform the updates
-#while(i < num_updates):
-#	row = int(np.random.choice(idx))
-#	col = int(np.random.choice(idx))
-
-#	rate = calculate_rate(row, col, K, state, num_spins)
-#	draw = np.random.uniform(0, 1)
-#if(draw <= rate):
- #                state[row,col] = -state[row,col]
-     #    k = 0
-      #   s = 0
-       #  while(k < num_spins)
-        #      if(k == num_spins):
-         #         s = s + state[15,k]*state[15,1]
-          #        else: 
-           #           s = s + state[15,k]*state[15,k+1]
-            #    k = i + 1
- #    i = i + 1
- 
  
 num_trials = 200
 
