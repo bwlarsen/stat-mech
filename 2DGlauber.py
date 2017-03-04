@@ -61,6 +61,8 @@ t1 = time.time()
 total = t1 - t0
 print total
 
+
+
 # Show the final configuration
 plt.imshow(state, cmap='Greys',  interpolation='nearest')
 plt.show()

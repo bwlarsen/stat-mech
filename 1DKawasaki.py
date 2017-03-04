@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 
+
 def calculate_rate(x, temp, state, max_spin):
 	s = float(state[x])
 	if (x == 0):
@@ -25,17 +26,21 @@ def calculate_rate(x, temp, state, max_spin):
 
 
 # Initialize 2D array of spins
-K = 10000
-gamma = 1
+K = 1000000
+gamma = np.tanh(2*K)
 num_spins = 256
-num_updates = 100*num_spins*num_spins
+num_updates = 1000*num_spins
 state = 2*np.random.randint(2, size=(num_spins))-1
 
 idx = np.linspace(0, num_spins - 1, num_spins)
 
 i = 0
 
+plt.plot(idx, state)
+plt.show()
 
+initial = np.sum(state)
+print initial
 
 t0 = time.time()
 
@@ -57,6 +62,9 @@ while(i < num_updates):
 t1 = time.time()
 total = t1 - t0
 print total
+
+final = np.sum(state)
+print final
 
 plt.plot(idx, state)
 plt.show()
