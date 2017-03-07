@@ -19,14 +19,14 @@ def calculate_rate(x, temp, state, max_spin):
 	return transition
 
 def func(x, A, b):
-	return A*np.power(x, b)
+	return A*np.exp(b*x)
 
 
 # Initialize 2D array of spins
 K = 100000
 gamma = 1
 num_spins = 100
-num_updates = 100*num_spins
+num_updates = 200*num_spins
 num_trials = 500
 
 
@@ -35,16 +35,17 @@ updates = np.linspace(0, num_updates - 1, num_updates)
 
 j = 0
 
-corr_all = np.zeros(num_spins)
-corr = np.zeros(num_updates)
-corr_avg = np.zeros(num_updates)
+
+mag = np.zeros(num_updates)
+mag_avg = np.zeros(num_updates)
 
 
 t0 = time.time()
 
 while(j < num_trials):
 
-	state = 2*np.random.randint(2, size=(num_spins))-1
+	#state = 2*np.random.randint(2, size=(num_spins))-1
+	state = np.ones(num_spins)
 	i = 0
 
 	while(i < num_updates):
@@ -55,36 +56,38 @@ while(j < num_trials):
 		if(draw <= rate):
 			state[row] = -state[row]
 		
-		shift_state = np.roll(state, 1)
-		corr_all = state * shift_state
-		corr[i] =  1.0/float(num_spins) * float(np.sum(corr_all))
+		
+		mag[i] =  1.0/float(num_spins) * float(np.sum(state))
 
 		i = i+1
 
-	corr_avg = corr_avg + corr
+	mag_avg = mag_avg + mag
 	j = j+1
 	if(j % 50 == 0):
 		print j
 
-corr_avg = 1.0/float(num_trials) * corr_avg
+mag_avg = 1.0/float(num_trials) * mag_avg
 
 t1 = time.time()
 total = t1 - t0
 print total
-rho = 0.5*(1.0 - corr_avg)
-rho_inv = 1/rho
 
 t = np.linspace(0, 1/float(num_spins) * float(num_updates), num_updates)
 
-popt, pcov = curve_fit(func, t, rho_inv, p0=(1.0, 0.5))
-print popt
+#popt, pcov = curve_fit(func, t, mag_avg, p0=(1.0, -0.5))
+#print popt
 
-fit_func = popt[0] * np.power(t, popt[1])
+fit_func = np.exp(-(1 - gamma)*t)
 
-plt.plot(t, rho_inv)
-plt.plot(t, fit_func)
+sim = plt.plot(t, mag_avg, label = 'Simulation')
+theory = plt.plot(t, fit_func, label = 'Theory')
+plt.xlabel('t')
+plt.ylabel('m')
+
+plt.legend(numpoints = 3)
+
 axes = plt.gca()
-#axes.set_ylim([0,1])
+axes.set_ylim([0,1.25])
 plt.show()
 
 

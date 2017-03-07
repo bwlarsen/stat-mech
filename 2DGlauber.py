@@ -32,9 +32,9 @@ def calculate_rate(x, y, temp, state, max_spin):
 
 
 # Initialize 2D array of spins
-K = 100000
-num_spins = 256
-num_updates = 150*num_spins*num_spins
+K = 100000000
+num_spins = 200
+num_updates = 0 #250*num_spins*num_spins
 state = 2*np.random.randint(2, size=(num_spins,num_spins))-1
 
 idx = np.linspace(0, num_spins - 1, num_spins)
@@ -56,6 +56,8 @@ while(i < num_updates):
 	if(draw <= rate):
 		state[row,col] = -state[row,col]
 	i = i + 1
+	if (i % 100000 == 0):
+		print i
 
 t1 = time.time()
 total = t1 - t0
