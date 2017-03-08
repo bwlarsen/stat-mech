@@ -25,16 +25,16 @@ def calculate_rate(x, temp, state, max_spin):
 	transition = 0.5*(1.0 - temp* 0.5 * (s_1*s + s1*s2)) * 0.5*(1.0 - s*s1)
 	return transition
 
-def func(x, A, b):
-	return A*np.power(x, b) 
+def func(x, A, b, c):
+	return A*np.power(x, b) + c
 
 
 # Initialize 2D array of spins
 K = 100000000
-gamma = 0.99999#np.tanh(2*K)
+gamma = 0.9#np.tanh(2*K)
 num_spins = 1000
-num_updates = 10*num_spins
-num_trials = 5
+num_updates = 5*num_spins
+num_trials = 1000
 
 
 idx = np.linspace(0, num_spins - 1, num_spins)
@@ -85,8 +85,9 @@ while(j < num_trials):
 		i = i + 1
 
 	corr_avg = corr_avg + corr
-	j = j+1
-	print j
+	j = j + 1
+	if(j % 50 == 0):
+		print j
 
 corr_avg = 1.0/float(num_trials) * corr_avg
 
@@ -101,17 +102,17 @@ rho_inv = 1/rho
 
 t = np.linspace(0, 1/float(num_spins) * float(num_updates), num_updates)
 
-popt, pcov = curve_fit(func, t, rho_inv, p0=(1.0, 0.4))
+popt, pcov = curve_fit(func, t[10:num_updates - 1], rho_inv[10:num_updates - 1], p0=(1.0, 0.4, 0))
 print popt
 
-fit_func = popt[0] * np.power(t, popt[1]) 
-theory = 2.67*np.power(t, 0.333333333)
+fit_func = popt[0] * np.power(t, popt[1]) + popt[2]
 
-plt.plot(t, rho_inv)
+
+sim = plt.plot(t, rho_inv, label = 'Simulation')
+theory = plt.plot(t, fit_func, label = 'Fit')
 axes = plt.gca()
-plt.plot(t, fit_func)
-#plt.plot(t, theory)
 #axes.set_ylim([0,1])
+plt.legend(numpoints = 3, loc = 'upper left')
 plt.show()
 
 # plt.plot(idx, state)

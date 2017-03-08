@@ -42,10 +42,10 @@ def calculate_rate(x, y, temp, state, dir, max_spin):
 
 
 # Initialize 2D array of spins
-K = 0.7
-gamma = np.tanh(2*K)
-num_spins = 256
-num_updates = 100*num_spins*num_spins
+K = 1
+gamma = 1#np.tanh(2*K)
+num_spins = 50
+num_updates = 5000*num_spins*num_spins
 state = 2*np.random.randint(2, size=(num_spins, num_spins))-1
 
 idx = np.linspace(0, num_spins - 1, num_spins)

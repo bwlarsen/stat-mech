@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib
 import time
 from scipy.optimize import curve_fit
 
@@ -25,8 +26,8 @@ def func(x, A, b):
 # Initialize 2D array of spins
 K = 100000
 num_spins = 100
-gamma = 0.99
-num_updates = 200*num_spins
+gamma = 1
+num_updates = 10000*num_spins
 num_trials = 1000
 
 
@@ -50,6 +51,14 @@ i = 0
 while(i < num_updates):
 	row = int(np.random.choice(idx))
 
+	if((i == 0) or (i == 100) or (i == 1000) or (i ==9999)):
+		plt.plot(idx, state)
+		plt.pause(0.0001)
+		axes = plt.gca()
+		axes.set_ylim([-1,1])
+		plt.show()
+		plt.pause(0.0001)
+
 	rate = calculate_rate(row, gamma, state, num_spins)
 	draw = np.random.uniform(0, 1)
 	if(draw <= rate):
@@ -60,7 +69,12 @@ while(i < num_updates):
 	i = i+1
 
 
-
+plt.plot(idx, state)
+plt.pause(0.0001)
+axes = plt.gca()
+axes.set_ylim([-1,1])
+plt.show()
+plt.pause(0.0001)
 
 
 t1 = time.time()
@@ -68,9 +82,7 @@ total = t1 - t0
 print total
 
 
-plt.plot(idx, state)
-axes = plt.gca()
-plt.show()
+
 
 
 

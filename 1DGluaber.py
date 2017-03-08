@@ -18,8 +18,8 @@ def calculate_rate(x, temp, state, max_spin):
 	transition = 0.5*(1.0 - float(state[x])* temp*0.5*float(nn_sum))
 	return transition
 
-def func(x, A, b):
-	return A*np.power(x, b)
+def func(x, A, b, c):
+	return A*np.power(x, b) + c
 
 
 # Initialize 2D array of spins
@@ -27,7 +27,7 @@ K = 100000
 gamma = 1
 num_spins = 100
 num_updates = 100*num_spins
-num_trials = 500
+num_trials = 1000
 
 
 idx = np.linspace(0, num_spins - 1, num_spins)
@@ -76,15 +76,16 @@ rho_inv = 1/rho
 
 t = np.linspace(0, 1/float(num_spins) * float(num_updates), num_updates)
 
-popt, pcov = curve_fit(func, t, rho_inv, p0=(1.0, 0.5))
+popt, pcov = curve_fit(func, t[10:num_updates - 1], rho_inv[10:num_updates - 1], p0=(1.0, 0.5, 0))
 print popt
 
-fit_func = popt[0] * np.power(t, popt[1])
+fit_func = popt[0] * np.power(t, popt[1]) + popt[2]
 
-plt.plot(t, rho_inv)
-plt.plot(t, fit_func)
+sim = plt.plot(t, rho_inv, label = 'Simulation')
+theory = plt.plot(t, fit_func, label = 'Fit')
 axes = plt.gca()
 #axes.set_ylim([0,1])
+plt.legend(numpoints = 3, loc = 'upper left')
 plt.show()
 
 

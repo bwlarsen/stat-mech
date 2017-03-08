@@ -26,7 +26,7 @@ def calculate_rate(x, temp, state, max_spin):
 	return 
 
 def func(x, A, b):
-	return A*np.power(x, b)
+	return A*np.power(x, b) 
 
 
 # Initialize 2D array of spins
