@@ -1,3 +1,5 @@
+### Code for plotting one realization to the 1D Ising model with Kawasaki dynamics
+
 import numpy as np
 import matplotlib.pyplot as plt
 import time

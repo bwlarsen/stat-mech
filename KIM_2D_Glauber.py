@@ -1,13 +1,9 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Mar  1 15:09:35 2017
-
-@author: Sarah
-"""
+#### Code for calculating the dynamics of the 2D Glauber model
 
 import numpy as np
 import matplotlib.pyplot as plt
 import time
+from scipy.optimize import curve_fit
 
 # Function to calculate transition rates
 def calculate_rate(x, y, temp, state, max_spin):
@@ -37,17 +33,19 @@ def calculate_rate(x, y, temp, state, max_spin):
 	transition = 0.5*(1.0 - float(state[x,y])* np.tanh(temp*nn_sum))
 	return transition
 
+def func(x, A, b, c):
+	return A*np.power(x, b) + c
+
 
 # Initialize 2D array of spins
 K = 0.6
 num_spins = 30
 num_updates = 50*num_spins*num_spins
-#state = 2*np.random.randint(2, size=(num_spins,num_spins))-1
+
 
 idx = np.linspace(0, num_spins - 1, num_spins)
 
-# plt.imshow(state, cmap='Greys',  interpolation='nearest')
-# plt.show()
+
 
 i = 0
 
@@ -58,11 +56,11 @@ num_trials = 200
 g1 = np.zeros([num_trials,num_updates]) 
 
 j = 0
- # Perform the updates
+ # Perform the trials
 while(j < num_trials):
     state = 2*np.random.randint(2, size=(num_spins,num_spins))-1
     #g1 = np.zeros([num_trials,num_updates]) 
-    
+    #Perform the updates
     for i in range(num_updates):
         row = int(np.random.choice(idx))
         col = int(np.random.choice(idx))
@@ -75,6 +73,7 @@ while(j < num_trials):
         s = 0     
         for k in range(num_spins-1):
             
+            #For each update, calculate the corellation between NN
             if(k == num_spins-1):
                 s = s + state[15,k]*state[15,1]
             else: 
@@ -83,25 +82,28 @@ while(j < num_trials):
     j = j + 1
     print(j)
 
-rho = (1/2)*(1 - np.mean(g1,axis=0))
-length = 1/rho
+# Calculate the domain wall density
+rho = (0.5)*(1.0 - np.mean(g1,axis=0))
+rho_inv = 1/rho
 
 t1 = time.time()
 total = t1 - t0
 print('total')
 
-# Show the final configuration
-plt.figure(0)
-plt.imshow(state, cmap='Greys',  interpolation='nearest')
+t = np.linspace(0, 1/float(num_spins) * float(num_updates), num_updates)
+
+popt, pcov = curve_fit(func, t[10:num_updates - 1], rho_inv[10:num_updates - 1], p0=(1.0, 0.4, 0))
+print popt
+
+fit_func = popt[0] * np.power(t, popt[1]) + popt[2]
+
+
+sim = plt.plot(t, rho_inv, label = 'Simulation')
+theory = plt.plot(t, fit_func, label = 'Fit')
+axes = plt.gca()
+#axes.set_ylim([0,1])
+plt.legend(numpoints = 3, loc = 'upper left')
 plt.show()
-
-t = range(num_updates)
-model = 0.04*np.power(t,1/2) + 2
-
-plt.figure(1)
-plt.plot(t,length)
-plt.hold(True)
-plt.plot(t,model)
 
 
 

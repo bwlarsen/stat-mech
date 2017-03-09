@@ -1,3 +1,5 @@
+### Code for simulating the decay of the magnetization in the 1D Ising-Glauber model
+
 import numpy as np
 import matplotlib.pyplot as plt
 import time

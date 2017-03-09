@@ -1,8 +1,11 @@
+### Code for simulating the dynamics of the 1D Glauber model
+
 import numpy as np
 import matplotlib.pyplot as plt
 import time
 from scipy.optimize import curve_fit
 
+# Function for calculating transition rates
 def calculate_rate(x, temp, state, max_spin):
 	if (x == 0):
 		s1 = state[max_spin-1]
@@ -22,7 +25,7 @@ def func(x, A, b, c):
 	return A*np.power(x, b) + c
 
 
-# Initialize 2D array of spins
+# Initialize 1D array of spins
 K = 100000
 gamma = 1
 num_spins = 100
@@ -44,6 +47,7 @@ t0 = time.time()
 
 while(j < num_trials):
 
+	# Randomly initialize the spins each trial
 	state = 2*np.random.randint(2, size=(num_spins))-1
 	i = 0
 
@@ -66,8 +70,10 @@ while(j < num_trials):
 	if(j % 50 == 0):
 		print j
 
+# corr_avg stores the average correlation at each update
 corr_avg = 1.0/float(num_trials) * corr_avg
 
+# Fit to the power law for the mean domain wall separation
 t1 = time.time()
 total = t1 - t0
 print total

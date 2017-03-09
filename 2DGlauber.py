@@ -1,3 +1,5 @@
+### Code for simulating one realization of the 2D Glauber model
+
 import numpy as np
 import matplotlib.pyplot as plt
 import time
